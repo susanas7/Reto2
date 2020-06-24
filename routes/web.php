@@ -14,9 +14,18 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+
+    $user=Auth::user();
+    if(Auth::check())
+    if($user->isAdmin()){
+      return view('admin');
+    }else{
+      return view('user');
+    }
     return view('welcome');
-});
+})->middleware('auth');
 
-Auth::routes();
+//registro de las rutas de verificacion
+Auth::routes(['verify'=>true]);
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', 'HomeController@index')->name('home')->middleware('verified');
